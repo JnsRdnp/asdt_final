@@ -12,7 +12,7 @@ class Island():
 
     pygame.font.init()
 
-    def __init__(self, colors, x, y, fontsize, screen,text=''):
+    def __init__(self, colors, x, y, fontsize, screen, Islands, text=''):
         
         self.color = colors["yellow"]
         self.color_dict = colors
@@ -21,24 +21,52 @@ class Island():
         self.fontsize = fontsize
         self.screen = screen
         self.text = text
+        self.Islands = Islands
 
         self.added_size = 20 # For the island padding relative to text
 
         self.update()
-        self.create_monkeys()
+
+        self.Monkeys_on_this_island={
+            
+        }
+
+        self.initialize_island()
+        # self.create_monkeys()
+
+    def initialize_island(self):
+        while True: # Recreate the values for Island till there is no overlap
+            self.randomize_values()  # Generate random x, y, fontsize
+            self.update()  # Update to redefine the rectangle with randomized values
+            print(self.is_overlapping())
+            if self.is_overlapping() == False or self.is_overlapping() == None:
+                break  # Exit the loop succesfully if no overlap is found
+            
+
 
     def create_monkeys(self):
-        self.Monkey1 = Monkey(self.color_dict, 10, 10, self.screen)
+        # monkey_index = 0
+        print(self.generate_random_location_for_monkey())
+        for monkey_index in range(1,10):
+            self.Monkeys_on_this_island[f"monkey_{monkey_index}"] = Monkey(self.color_dict, 10*monkey_index, 10, self.screen)
+
+    def generate_random_location_for_monkey(self):
+        self.max_monkey_location = self.shape_rect.bottomleft
+        self.min_monkey_location = self.shape_rect.topleft
+
+        return self.max_monkey_location
         
+
+
     def randomize_values(self):
         self.x = random.randint(0,750)
         self.y = random.randint(0,500)
         self.fontsize = random.randint(7,50)
 
 
-    def is_overlapping(self, Islands):  # Check if this Island overlaps with any islands in the dictionary
-        if Islands:
-            for Island in Islands.values():
+    def is_overlapping(self):  # Check if this Island overlaps with any islands in the dictionary
+        if self.Islands:
+            for Island in self.Islands.values():
                 if pygame.Rect.colliderect(Island.shape_rect, self.shape_rect) == True and Island != self:
                     return True
                 
@@ -49,8 +77,9 @@ class Island():
         pygame.draw.rect(self.screen, self.color, self.shape_rect, border_radius=5)
         self.screen.blit(self.text_surface, (self.shape_rect.left+self.added_size/2, self.shape_rect.top+self.added_size/2))
 
-
-        self.Monkey1.draw()
+        if self.Monkeys_on_this_island:
+            for Monkey in self.Monkeys_on_this_island.values():
+                Monkey.draw()
 
     def update(self):
         self.my_font = pygame.font.SysFont('Comic Sans MS', self.fontsize)

@@ -47,15 +47,7 @@ class Game:
 
     def create_island_object(self):
         self.island_counter += 1 
-        self.Islands[f"island_{self.island_counter}"] = Island(self.Colors, 10, 10, 10 ,self.screen,f'S{self.island_counter}' ) # Create island dynamically and append to dict
-
-        while True: # Recreate the values for Island till there is no overlap
-            self.Islands[f"island_{self.island_counter}"].randomize_values()  # Generate random x, y, fontsize
-            self.Islands[f"island_{self.island_counter}"].update()  # Update to redefine the rectangle with randomized values
-        
-            if self.Islands[f"island_{self.island_counter}"].is_overlapping(self.Islands) == False:
-                break  # Exit the loop succesfully if no overlap is found
-        
+        self.Islands[f"island_{self.island_counter}"] = Island(self.Colors, 10, 10, 10 ,self.screen, self.Islands, f'S{self.island_counter}' ) # Create island dynamically and append to dict
 
 
     def destroy_islands(self):
