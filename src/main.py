@@ -1,5 +1,6 @@
 import pygame
 import sys
+from button import Button
 
 class Game:
     def __init__(self):
@@ -26,6 +27,12 @@ class Game:
             "red" : (216, 17, 89)
         }
 
+        self.create_button_objects()
+        
+
+    def create_button_objects(self):
+        self.Button_volcano = Button(self.Colors["black"],self.width/2.5, self.height-50, 22, "Tulivuori") 
+
     def process_input(self):
         """Handle input events like quitting or key presses."""
         for event in pygame.event.get():
@@ -39,6 +46,9 @@ class Game:
     def render(self):
         """Draw everything to the screen."""
         self.screen.fill(self.Colors["blue"])  # Clear screen with white background
+
+        self.Button_volcano.draw(self.screen)
+        
 
         # Add any drawing code here
         pygame.display.flip()  # Update the display
