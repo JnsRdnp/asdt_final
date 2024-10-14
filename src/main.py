@@ -86,7 +86,15 @@ class Game:
 
     def update(self):
         """Update game state, logic, etc."""
-        pass
+
+        if self.Islands: # Check that Islands exist 
+            for Island in self.Islands.values(): # Dynamically draw each Island in the dictionary
+                Island.update()
+
+        if self.Buttons: # Check that Buttons exist 
+            for Button in self.Buttons.values(): # Dynamically draw each Island in the dictionary
+                Button.update()
+
 
     def render(self):
         """Draw everything to the screen."""

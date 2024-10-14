@@ -82,7 +82,7 @@ class Island():
 
 
     def randomize_values(self):
-        self.x = random.randint(0,750)
+        self.x = random.randint(0,725)
         self.y = random.randint(0,500)
         self.fontsize = random.randint(7,50)
 
@@ -100,8 +100,6 @@ class Island():
         return value
 
     def draw(self):
-        self.text_surface = self.my_font.render(f'{self.text}:{self.monkey_count}', False, (0, 0, 0))
-
         pygame.draw.rect(self.screen, self.color, self.shape_rect, border_radius=5)
 
         if self.Monkeys_on_this_island:
