@@ -31,15 +31,23 @@ class Island():
             
         }
 
+        
+
         self.initialize_island()
         self.create_monkeys()
+        self.island_creation_sound()
 
+
+    def island_creation_sound(self):
+        lava_sound = pygame.mixer.Sound('./assets/lava.wav')
+        lava_sound.play()
+        lava_sound.fadeout(3000)
 
     def initialize_island(self):
         while True: # Recreate the values for Island till there is no overlap
             self.randomize_values()  # Generate random x, y, fontsize
             self.update()  # Update to redefine the rectangle with randomized values
-            print(self.is_overlapping())
+            # print(self.is_overlapping())
             if self.is_overlapping() == False or self.is_overlapping() == None:
                 break  # Exit the loop succesfully if no overlap is found
             

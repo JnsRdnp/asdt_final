@@ -32,14 +32,12 @@ class Game:
 
         self.island_counter = 0
 
-        self.Islands = { # Dictionary for Island objects
+        self.Islands = {} # Dictionary for Island objects
+    
 
-        }
+        self.Buttons = {} # Dictionary for Button objects
 
-
-        self.Buttons = { # Dictionary for Button objects
-
-        }
+      
 
         self.create_button_objects()
 
