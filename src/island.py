@@ -57,8 +57,8 @@ class Island():
         max_monkey_location = self.shape_rect.bottomright
         min_monkey_location = self.shape_rect.topleft
 
-        random_monkey_x = random.randint(min_monkey_location[0], max_monkey_location[0])
-        random_monkey_y = random.randint(min_monkey_location[1], max_monkey_location[1])
+        random_monkey_x = random.randint(min_monkey_location[0]+7, max_monkey_location[0]-7) # 7, because diameter of monkeys is 7 and we dont want it overflow the island
+        random_monkey_y = random.randint(min_monkey_location[1]+7, max_monkey_location[1]-7)
 
         random_monkey_location = (random_monkey_x, random_monkey_y)
 
