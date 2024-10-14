@@ -16,8 +16,15 @@ class Game:
         self.running = True
 
         # Colors
-        self.white = (255, 255, 255)
-        self.black = (0, 0, 0)
+        self.Colors = {
+            "white" : (255, 255, 255),
+            "black" : (0, 0, 0),
+            "blue" : (155, 210, 222),
+            "yellow" : (251, 177, 60),
+            "teal": (33, 131, 128),
+            "magenta" : (143, 45, 86),
+            "red" : (216, 17, 89)
+        }
 
     def process_input(self):
         """Handle input events like quitting or key presses."""
@@ -31,7 +38,7 @@ class Game:
 
     def render(self):
         """Draw everything to the screen."""
-        self.screen.fill(self.white)  # Clear screen with white background
+        self.screen.fill(self.Colors["blue"])  # Clear screen with white background
 
         # Add any drawing code here
         pygame.display.flip()  # Update the display
