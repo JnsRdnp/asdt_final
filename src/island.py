@@ -32,7 +32,8 @@ class Island():
         }
 
         self.initialize_island()
-        # self.create_monkeys()
+        self.create_monkeys()
+
 
     def initialize_island(self):
         while True: # Recreate the values for Island till there is no overlap
@@ -46,15 +47,22 @@ class Island():
 
     def create_monkeys(self):
         # monkey_index = 0
-        print(self.generate_random_location_for_monkey())
+        
         for monkey_index in range(1,10):
-            self.Monkeys_on_this_island[f"monkey_{monkey_index}"] = Monkey(self.color_dict, 10*monkey_index, 10, self.screen)
+            monkey_loc = self.generate_random_location_for_monkey()
+            self.Monkeys_on_this_island[f"monkey_{monkey_index}"] = Monkey(self.color_dict, monkey_loc[0], monkey_loc[1], self.screen)
+
 
     def generate_random_location_for_monkey(self):
-        self.max_monkey_location = self.shape_rect.bottomleft
-        self.min_monkey_location = self.shape_rect.topleft
+        max_monkey_location = self.shape_rect.bottomright
+        min_monkey_location = self.shape_rect.topleft
 
-        return self.max_monkey_location
+        random_monkey_x = random.randint(min_monkey_location[0], max_monkey_location[0])
+        random_monkey_y = random.randint(min_monkey_location[1], max_monkey_location[1])
+
+        random_monkey_location = (random_monkey_x, random_monkey_y)
+
+        return random_monkey_location
         
 
 
@@ -75,11 +83,12 @@ class Island():
 
     def draw(self):
         pygame.draw.rect(self.screen, self.color, self.shape_rect, border_radius=5)
-        self.screen.blit(self.text_surface, (self.shape_rect.left+self.added_size/2, self.shape_rect.top+self.added_size/2))
 
         if self.Monkeys_on_this_island:
             for Monkey in self.Monkeys_on_this_island.values():
                 Monkey.draw()
+
+        self.screen.blit(self.text_surface, (self.shape_rect.left+self.added_size/2, self.shape_rect.top+self.added_size/2))
 
     def update(self):
         self.my_font = pygame.font.SysFont('Comic Sans MS', self.fontsize)
