@@ -7,6 +7,8 @@
 import pygame
 import random
 from monkey import Monkey
+import threading
+
 
 class Island():
 
@@ -25,17 +27,20 @@ class Island():
 
         self.added_size = 20 # For the island padding relative to text
 
-        self.update()
-
-        self.Monkeys_on_this_island={
-            
-        }
-
         
 
+        self.Monkeys_on_this_island={
+
+        }
+        self.monkey_count = 0
+        
+        self.update()
         self.initialize_island()
         self.create_monkeys()
         self.island_creation_sound()
+
+        # print(self.count_monkeys())
+        
 
 
     def island_creation_sound(self):
@@ -56,9 +61,11 @@ class Island():
     def create_monkeys(self):
         # monkey_index = 0
         
-        for monkey_index in range(1,10):
+        for monkey_index in range(0,10):
             monkey_loc = self.generate_random_location_for_monkey()
             self.Monkeys_on_this_island[f"monkey_{monkey_index}"] = Monkey(self.color_dict, monkey_loc[0], monkey_loc[1], self.screen)
+
+        self.monkey_count = self.count_monkeys() # Update monkey count
 
 
     def generate_random_location_for_monkey(self):
@@ -87,9 +94,14 @@ class Island():
                     return True
                 
             return False # If any of the islands did not overlap with this one, return False
-
+        
+    def count_monkeys(self):
+        value = len(self.Monkeys_on_this_island)
+        return value
 
     def draw(self):
+        self.text_surface = self.my_font.render(f'{self.text}:{self.monkey_count}', False, (0, 0, 0))
+
         pygame.draw.rect(self.screen, self.color, self.shape_rect, border_radius=5)
 
         if self.Monkeys_on_this_island:
@@ -97,10 +109,10 @@ class Island():
                 Monkey.draw()
 
         self.screen.blit(self.text_surface, (self.shape_rect.left+self.added_size/2, self.shape_rect.top+self.added_size/2))
-
+        
     def update(self):
         self.my_font = pygame.font.SysFont('Comic Sans MS', self.fontsize)
-        self.text_surface = self.my_font.render(self.text, False, (0, 0, 0))
+        self.text_surface = self.my_font.render(f'{self.text}:{self.monkey_count}', False, (0, 0, 0))
         self.text_rect = self.text_surface.get_rect()
         self.shape_rect = pygame.Rect(self.x,self.y,self.text_rect.width+self.added_size,self.text_rect.height+self.added_size)
 
