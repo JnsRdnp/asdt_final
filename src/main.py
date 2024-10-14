@@ -13,7 +13,7 @@ class Game:
         # Set up display
         self.width, self.height = 800, 600
         self.screen = pygame.display.set_mode((self.width, self.height))
-        pygame.display.set_caption('Volcano island')
+        pygame.display.set_caption('Volcano Island')
 
         # Set up game variables
         self.clock = pygame.time.Clock()
@@ -47,14 +47,14 @@ class Game:
 
     def create_island_object(self):
         self.island_counter += 1 
-        self.Islands[f"island_{self.island_counter}"] = Island(self.Colors["yellow"], 10, 10, 10 ,self.screen,f'S{self.island_counter}' ) # Create island dynamically and append to dict
+        self.Islands[f"island_{self.island_counter}"] = Island(self.Colors, 10, 10, 10 ,self.screen,f'S{self.island_counter}' ) # Create island dynamically and append to dict
 
         while True: # Recreate the values for Island till there is no overlap
             self.Islands[f"island_{self.island_counter}"].randomize_values()  # Generate random x, y, fontsize
             self.Islands[f"island_{self.island_counter}"].update()  # Update to redefine the rectangle with randomized values
         
             if self.Islands[f"island_{self.island_counter}"].is_overlapping(self.Islands) == False:
-                break  # Exit the loop if no overlap is found
+                break  # Exit the loop succesfully if no overlap is found
         
 
 
@@ -64,8 +64,8 @@ class Game:
 
 
     def create_button_objects(self):
-        self.Buttons["create_island"] = Button(self.Colors["black"], self.width/3, self.height-50, 22, self.screen, onClick=self.create_island_object ,text="Tulivuori purkautuu")
-        self.Buttons["wipe_island"] = Button(self.Colors["black"], self.width/3, self.height-90, 22, self.screen, onClick=self.destroy_islands ,text="Hävitä saaret")
+        self.Buttons["create_island"] = Button(self.Colors, self.width/3, self.height-50, 22, self.screen, onClick=self.create_island_object ,text="Tulivuori purkautuu")
+        self.Buttons["wipe_island"] = Button(self.Colors, self.width/3, self.height-90, 22, self.screen, onClick=self.destroy_islands ,text="Hävitä saaret")
 
 
     
@@ -78,7 +78,7 @@ class Game:
             if event.type == pygame.MOUSEBUTTONDOWN:   # Handling of button clicking
                 mouse_pos = event.pos  # gets mouse position
 
-                for Button in self.Buttons.values():
+                for Button in self.Buttons.values(): # Iterate through the buttons dictionary to find out if a button was pressed
                     if Button.button_rect.collidepoint(mouse_pos):
                         Button.on_click()
 

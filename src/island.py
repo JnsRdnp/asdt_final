@@ -6,14 +6,16 @@
 
 import pygame
 import random
+from monkey import Monkey
 
 class Island():
 
     pygame.font.init()
 
-    def __init__(self, color, x, y, fontsize, screen,text=''):
+    def __init__(self, colors, x, y, fontsize, screen,text=''):
         
-        self.color = color
+        self.color = colors["yellow"]
+        self.color_dict = colors
         self.x = x
         self.y = y
         self.fontsize = fontsize
@@ -23,10 +25,13 @@ class Island():
         self.added_size = 20 # For the island padding relative to text
 
         self.update()
+        self.create_monkeys()
 
+    def create_monkeys(self):
+        self.Monkey1 = Monkey(self.color_dict, 10, 10, self.screen)
         
     def randomize_values(self):
-        self.x = random.randint(0,700)
+        self.x = random.randint(0,750)
         self.y = random.randint(0,500)
         self.fontsize = random.randint(7,50)
 
@@ -43,6 +48,9 @@ class Island():
     def draw(self):
         pygame.draw.rect(self.screen, self.color, self.shape_rect, border_radius=5)
         self.screen.blit(self.text_surface, (self.shape_rect.left+self.added_size/2, self.shape_rect.top+self.added_size/2))
+
+
+        self.Monkey1.draw()
 
     def update(self):
         self.my_font = pygame.font.SysFont('Comic Sans MS', self.fontsize)

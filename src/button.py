@@ -9,9 +9,9 @@ class Button():
 
     pygame.font.init()
 
-    def __init__(self, color, x,y, fontsize, screen, onClick, text=''):
+    def __init__(self, colors, x,y, fontsize, screen, onClick, text=''):
 
-        self.color = color
+        self.color = colors["black"]
         self.x = x
         self.y = y
         self.fontsize = fontsize
