@@ -1,6 +1,7 @@
 import pygame
 import sys
 from button import Button
+from island import Island
 
 class Game:
     def __init__(self):
@@ -10,7 +11,7 @@ class Game:
         # Set up display
         self.width, self.height = 800, 600
         self.screen = pygame.display.set_mode((self.width, self.height))
-        pygame.display.set_caption('My Pygame Project')
+        pygame.display.set_caption('Volcano island')
 
         # Set up game variables
         self.clock = pygame.time.Clock()
@@ -27,12 +28,25 @@ class Game:
             "red" : (216, 17, 89)
         }
 
+        self.Islands = {
+
+        }
+
         self.create_button_objects()
-        
+
+        self.create_island_object("S1", 25)
+
+
 
     def create_button_objects(self):
-        self.Button_volcano = Button(self.Colors["black"],self.width/2.5, self.height-50, 22, "Tulivuori") 
+        self.Button_volcano = Button(self.Colors["black"],self.width/3, self.height-50, 22, self.screen, "Tulivuori purkautuu")
 
+    def create_island_object(self, name, size):
+        self.Island_1 = Island(self.Colors["yellow"], 100, 100, size, self.screen, name)
+        self.Island_1.randomize_values() # Generate random x, y, fontsize
+        self.Island_1.update() # Update to redefine the rectangle with randomized values
+ 
+    
     def process_input(self):
         """Handle input events like quitting or key presses."""
         for event in pygame.event.get():
@@ -47,8 +61,9 @@ class Game:
         """Draw everything to the screen."""
         self.screen.fill(self.Colors["blue"])  # Clear screen with white background
 
-        self.Button_volcano.draw(self.screen)
         
+        self.Island_1.draw()
+        self.Button_volcano.draw()
 
         # Add any drawing code here
         pygame.display.flip()  # Update the display
