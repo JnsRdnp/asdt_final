@@ -5,6 +5,8 @@ import sys
 from button import Button
 from island import Island
 
+
+
 class Game:
     def __init__(self):
         # Initialize Pygame

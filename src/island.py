@@ -47,7 +47,7 @@ class Island():
         while True: # Recreate the values for Island till there is no overlap
             self.randomize_values()  # Generate random x, y, fontsize
             self.update()  # Update to redefine the rectangle with randomized values
-            # print(self.is_overlapping())
+
             if self.is_overlapping() == False or self.is_overlapping() == None:
                 break  # Exit the loop succesfully if no overlap is found
             
