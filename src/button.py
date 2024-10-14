@@ -9,7 +9,7 @@ class Button():
 
     pygame.font.init()
 
-    def __init__(self, color, x,y, fontsize, screen, text=''):
+    def __init__(self, color, x,y, fontsize, screen, onClick, text=''):
 
         self.color = color
         self.x = x
@@ -17,6 +17,8 @@ class Button():
         self.fontsize = fontsize
         self.screen = screen
         self.text = text
+
+        self.on_click = onClick
 
         self.update()
 
@@ -28,6 +30,8 @@ class Button():
         self.button_rect = pygame.Rect(self.x,self.y,self.text_rect.width+10,self.text_rect.height+2)
 
     def draw(self):
-
         pygame.draw.rect(self.screen, self.color, self.button_rect, border_radius=5)
         self.screen.blit(self.text_surface, (self.button_rect.left+5, self.button_rect.top))
+
+    # def on_click(self, function):
+

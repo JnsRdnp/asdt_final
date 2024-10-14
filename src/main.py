@@ -19,8 +19,8 @@ class Game:
         self.clock = pygame.time.Clock()
         self.running = True
 
-        # Colors
-        self.Colors = {
+
+        self.Colors = { # Colors
             "white" : (255, 255, 255),
             "black" : (0, 0, 0),
             "blue" : (155, 210, 222),
@@ -31,24 +31,36 @@ class Game:
         }
 
         self.island_counter = 0
-        self.Islands = {
+
+        self.Islands = { # Dictionary for Island objects
+
+        }
+
+
+        self.Buttons = { # Dictionary for Button objects
 
         }
 
         self.create_button_objects()
-        # self.create_island_object()
 
-
-
-    def create_button_objects(self):
-        self.Button_volcano = Button(self.Colors["black"],self.width/3, self.height-50, 22, self.screen, "Tulivuori purkautuu")
 
 
     def create_island_object(self):
         self.island_counter += 1 
-        self.Islands[f"island_{self.island_counter}"] = Island(self.Colors["yellow"], 10, 10, 10 ,self.screen, f'S{self.island_counter}' ) # Create island dynamically and append to dict
+        self.Islands[f"island_{self.island_counter}"] = Island(self.Colors["yellow"], 10, 10, 10 ,self.screen,f'S{self.island_counter}' ) # Create island dynamically and append to dict
         self.Islands[f"island_{self.island_counter}"].randomize_values() # Generate random x, y, fontsize
         self.Islands[f"island_{self.island_counter}"].update() # Update to redefine the rectangle with randomized values
+
+
+    def destroy_islands(self):
+        self.island_counter = 0
+        self.Islands.clear()
+
+
+    def create_button_objects(self):
+        self.Buttons["create_island"] = Button(self.Colors["black"], self.width/3, self.height-50, 22, self.screen, onClick=self.create_island_object ,text="Tulivuori purkautuu")
+        self.Buttons["wipe_island"] = Button(self.Colors["black"], self.width/3, self.height-90, 22, self.screen, onClick=self.destroy_islands ,text="Hävitä saaret")
+
 
     
     def process_input(self):
@@ -59,8 +71,10 @@ class Game:
     
             if event.type == pygame.MOUSEBUTTONDOWN:   # Handling of button clicking
                 mouse_pos = event.pos  # gets mouse position
-                if self.Button_volcano.button_rect.collidepoint(mouse_pos):
-                    self.create_island_object()
+
+                for Button in self.Buttons.values():
+                    if Button.button_rect.collidepoint(mouse_pos):
+                        Button.on_click()
 
 
     def update(self):
@@ -76,9 +90,9 @@ class Game:
             for Island in self.Islands.values(): # Dynamically draw each Island in the dictionary
                 Island.draw()
 
-
-        self.Button_volcano.draw()
-
+        if self.Buttons: # Check that Buttons exist 
+            for Button in self.Buttons.values(): # Dynamically draw each Island in the dictionary
+                Button.draw()
 
         pygame.display.flip()  # Update the display
 
