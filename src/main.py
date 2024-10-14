@@ -4,6 +4,7 @@ import pygame
 import sys
 from button import Button
 from island import Island
+import threading
 
 
 
@@ -65,8 +66,16 @@ class Game:
         """Handle input events like quitting or key presses."""
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                # Kill monkeys
+                for Island in self.Islands.values():
+                    for Monkey in Island.Monkeys_on_this_island.values():
+                        Monkey.alive = False
+
                 self.running = False
-    
+
+
+
+
             if event.type == pygame.MOUSEBUTTONDOWN:   # Handling of button clicking
                 mouse_pos = event.pos  # gets mouse position
 

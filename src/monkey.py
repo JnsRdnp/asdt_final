@@ -2,13 +2,15 @@ import pygame
 from toneplayer import Note
 import time
 import random
-from pygame.mixer import pre_init
+# from pygame.mixer import pre_init
+import threading
+
 
 class Monkey():
     pygame.font.init()
 
     def __init__(self, colors, x, y, screen):
-        pre_init(44100, -16, 1, 1024)
+        pygame.mixer.init(frequency=44100, size=-16, channels=1)
 
         self.color = colors["magenta"]
         self.x = x
@@ -17,14 +19,20 @@ class Monkey():
         self.size = 7
 
         self.update()
-        self.play_random_sound()
+
+        self.alive = True
+
+        # threading.Thread(target=self.play_random_sound).start() # Commented out due to ear failure
 
 
     def play_random_sound(self):
-        random_hz = random.randint(400,2000)
-        Beep = Note(random_hz).play(-1)
-        time.sleep(1)
-        Beep.stop()
+        while self.alive == True:
+            random_hz = random.randint(400,2000)
+            Beep = Note(random_hz)
+            Beep.play(-1)
+            time.sleep(1)
+            Beep.stop()
+            time.sleep(10)
 
 
     def living_sounds(self):

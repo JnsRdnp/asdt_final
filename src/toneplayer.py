@@ -1,3 +1,5 @@
+# https://gist.github.com/ohsqueezy/6540433
+
 from array import array
 from pygame.mixer import Sound, get_init
 
