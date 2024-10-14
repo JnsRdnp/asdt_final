@@ -1,3 +1,5 @@
+# https://www.quora.com/Is-there-a-way-in-Python-to-dynamically-create-an-object-of-a-class-every-time-a-condition-is-met-in-a-while-loop
+
 import pygame
 import sys
 from button import Button
@@ -28,30 +30,38 @@ class Game:
             "red" : (216, 17, 89)
         }
 
+        self.island_counter = 0
         self.Islands = {
 
         }
 
         self.create_button_objects()
-
-        self.create_island_object("S1", 25)
+        # self.create_island_object()
 
 
 
     def create_button_objects(self):
         self.Button_volcano = Button(self.Colors["black"],self.width/3, self.height-50, 22, self.screen, "Tulivuori purkautuu")
 
-    def create_island_object(self, name, size):
-        self.Island_1 = Island(self.Colors["yellow"], 100, 100, size, self.screen, name)
-        self.Island_1.randomize_values() # Generate random x, y, fontsize
-        self.Island_1.update() # Update to redefine the rectangle with randomized values
- 
+
+    def create_island_object(self):
+        self.island_counter += 1 
+        self.Islands[f"island_{self.island_counter}"] = Island(self.Colors["yellow"], 10, 10, 10 ,self.screen, f'S{self.island_counter}' ) # Create island dynamically and append to dict
+        self.Islands[f"island_{self.island_counter}"].randomize_values() # Generate random x, y, fontsize
+        self.Islands[f"island_{self.island_counter}"].update() # Update to redefine the rectangle with randomized values
+
     
     def process_input(self):
         """Handle input events like quitting or key presses."""
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running = False
+    
+            if event.type == pygame.MOUSEBUTTONDOWN:   # Handling of button clicking
+                mouse_pos = event.pos  # gets mouse position
+                if self.Button_volcano.button_rect.collidepoint(mouse_pos):
+                    self.create_island_object()
+
 
     def update(self):
         """Update game state, logic, etc."""
@@ -62,10 +72,14 @@ class Game:
         self.screen.fill(self.Colors["blue"])  # Clear screen with white background
 
         
-        self.Island_1.draw()
+        if self.Islands: # Check that Islands exist 
+            for Island in self.Islands.values(): # Dynamically draw each Island in the dictionary
+                Island.draw()
+
+
         self.Button_volcano.draw()
 
-        # Add any drawing code here
+
         pygame.display.flip()  # Update the display
 
     def run(self):

@@ -25,9 +25,9 @@ class Island():
 
         
     def randomize_values(self):
-        self.x = random.randint(50,750)
-        self.y = random.randint(50,550)
-        self.fontsize = random.randint(3,50)
+        self.x = random.randint(0,700)
+        self.y = random.randint(0,500)
+        self.fontsize = random.randint(7,50)
 
     def draw(self):
         pygame.draw.rect(self.screen, self.color, self.button_rect, border_radius=5)
