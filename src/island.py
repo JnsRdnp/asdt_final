@@ -146,15 +146,15 @@ class Island():
         for monkey_index in range(10):
             monkey_loc = self.generate_random_location_for_monkey()
             # Append Monkey objects directly to the list
-            self.Monkeys_on_this_island.append(Monkey(self.color_dict, monkey_loc[0], monkey_loc[1], self.screen))
+            self.Monkeys_on_this_island.append(Monkey(self.color_dict, monkey_loc[0], monkey_loc[1], self.screen, self.Islands))
 
 
     def generate_random_location_for_monkey(self):
         max_monkey_location = self.shape_rect.bottomright
         min_monkey_location = self.shape_rect.topleft
 
-        random_monkey_x = random.randint(min_monkey_location[0]+7, max_monkey_location[0]-7) # 7, because diameter of monkeys is 7 and we dont want it overflow the island
-        random_monkey_y = random.randint(min_monkey_location[1]+7, max_monkey_location[1]-7)
+        random_monkey_x = random.randint(min_monkey_location[0]+7, max_monkey_location[0]-14) # 7, because diameter of monkeys is 7 and we dont want it overflow the island
+        random_monkey_y = random.randint(min_monkey_location[1]+7, max_monkey_location[1]-14)
 
         random_monkey_location = (random_monkey_x, random_monkey_y)
 
