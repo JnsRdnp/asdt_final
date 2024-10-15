@@ -10,6 +10,7 @@ from monkey import Monkey
 import threading
 import time
 
+
 class Island():
 
     pygame.font.init()
@@ -31,7 +32,9 @@ class Island():
         self.is_island_civilized = False        
         
 
-        self.Monkeys_on_this_island={}
+        self.Monkeys_on_this_island=[]
+        self.Monkeys_on_the_sea=[]
+
         self.monkey_count = 0
 
         self.Platforms = {}
@@ -51,36 +54,48 @@ class Island():
         handle.start()
 
     def send_monkey_random(self):
-        monkey_is_on_sea = True
+        # monkey_is_on_sea = True
+        run = True
 
-        if self.Monkeys_on_this_island and self.is_island_civilized:
+        if len(self.Monkeys_on_this_island)>0 and self.is_island_civilized:
             print("Inside send_monkey_random_1")
             
             # Create a copy of the values to avoid modifying the dictionary during iteration
-            for Monkey in list(self.Monkeys_on_this_island.values()):
+            for Monkey in self.Monkeys_on_this_island:
 
-                while monkey_is_on_sea and Monkey.alive:
+                self.Monkeys_on_the_sea.append(Monkey)
+                self.Monkeys_on_this_island.remove(Monkey)
+
+                # self.Monkeys_on_this_island
+                while run == True and Monkey.alive:
                     Monkey.x += 7  # Update monkey position
-
+                    print(Monkey.x)
+                    print(Monkey.alive)
                     print("Inside send_monkey_random_2")
                     for Island in self.Islands.values():
                         print("Inside send_monkey_random_3")
                         if pygame.Rect.colliderect(Monkey.shape_rect, Island.shape_rect) and Island != self:
                             print("Apina uudella saarella")
-                            monkey_is_on_sea = False
+                            # monkey_is_on_sea = False
+                            Island.Monkeys_on_this_island.append(Monkey)
+                            self.Monkeys_on_the_sea.remove(Monkey)
+                            run = False
                             break  # Stop checking other islands once a match is found
-                    
-                    if not monkey_is_on_sea:
-                        return  # Exit if the monkey is no longer on the sea
+                    time.sleep(0.1)
+                if Monkey.alive == False:
+                    break
 
-                    time.sleep(0.2)  # Sleep to slow down updates (consider adjusting this for gameplay
+                if run == False:
+                    break
+                        
+
+                
                     
 
 
     def monkeys_civilize(self):
-        for monkey_key in list(self.Monkeys_on_this_island.keys()): 
-            monkey = self.Monkeys_on_this_island[monkey_key]
-            monkey.is_civilized = True # Civilize the monkeys
+        for Monkey in self.Monkeys_on_this_island: 
+            Monkey.is_civilized = True # Civilize the monkeys
 
         # self.is_island_civilized = True # Mark island as civilisized
 
@@ -102,11 +117,11 @@ class Island():
 
 
     def create_monkeys(self):
-        # monkey_index = 0
-        
-        for monkey_index in range(0,10):
+        # Create 10 monkeys and add them to the list
+        for monkey_index in range(10):
             monkey_loc = self.generate_random_location_for_monkey()
-            self.Monkeys_on_this_island[f"monkey_{monkey_index}"] = Monkey(self.color_dict, monkey_loc[0], monkey_loc[1], self.screen)
+            # Append Monkey objects directly to the list
+            self.Monkeys_on_this_island.append(Monkey(self.color_dict, monkey_loc[0], monkey_loc[1], self.screen))
 
 
     def generate_random_location_for_monkey(self):
@@ -150,14 +165,18 @@ class Island():
                 pygame.draw.rect(self.screen, self.platform_color, platform, border_radius=2)
 
         if self.Monkeys_on_this_island:
-            for Monkey in self.Monkeys_on_this_island.values():
+            for Monkey in self.Monkeys_on_this_island:
+                Monkey.draw()
+
+        if self.Monkeys_on_the_sea:
+            for Monkey in self.Monkeys_on_the_sea:
                 Monkey.draw()
 
         self.screen.blit(self.text_surface, (self.shape_rect.left+self.added_size/2, self.shape_rect.top+self.added_size/2))
         
 
     def check_if_any_civilisized_monkeys(self):
-        for Monkey in self.Monkeys_on_this_island.values():
+        for Monkey in self.Monkeys_on_this_island:
             if Monkey.is_civilized == True:
                 return True
             
@@ -167,11 +186,16 @@ class Island():
     def update(self):
         if self.Monkeys_on_this_island: # " By iterating over list(self.Monkeys_on_this_island.keys()), you avoid modifying the dictionary while iterating "
             
-            for monkey_key in list(self.Monkeys_on_this_island.keys()): # We use list to be able to delete iterated item from list
-                monkey = self.Monkeys_on_this_island[monkey_key]
-                monkey.update()
-                if not monkey.alive:
-                    del self.Monkeys_on_this_island[monkey_key]
+            for Monkey in list(self.Monkeys_on_this_island): # We use list to be able to delete iterated item from list
+                Monkey.update()
+                if not Monkey.alive:
+                    self.Monkeys_on_this_island.remove(Monkey)
+
+            for Monkey in list(self.Monkeys_on_the_sea): # We use list to be able to delete iterated item from list
+                Monkey.update()
+                if not Monkey.alive:
+                    self.Monkeys_on_the_sea.remove(Monkey)
+            
         
         self.monkey_count = self.count_monkeys() # Update the monkey count here to ensure new information
 

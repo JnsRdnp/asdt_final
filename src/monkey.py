@@ -35,6 +35,10 @@ class Monkey():
             random_integer = random.randint(0,100)
             if random_integer == 99:
                 self.alive=False
+            if self.x > 800:
+                self.alive=False
+            if self.y > 600:
+                self.alive=False
 
 
     def play_random_sound(self):

@@ -72,7 +72,9 @@ class Game:
             if event.type == pygame.QUIT:
                 # Kill monkeys
                 for Island in self.Islands.values():
-                    for Monkey in Island.Monkeys_on_this_island.values():
+                    for Monkey in Island.Monkeys_on_this_island:
+                        Monkey.alive = False
+                    for Monkey in Island.Monkeys_on_the_sea:
                         Monkey.alive = False
 
                 self.running = False
@@ -98,7 +100,7 @@ class Game:
             # else:
             #     Island.is_island_civilized = False
 
-                
+            
         if self.Buttons: # Check that Buttons exist 
             for Button in self.Buttons.values(): # Dynamically draw each Island in the dictionary
                 Button.update()
