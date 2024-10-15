@@ -9,6 +9,7 @@ import random
 from monkey import Monkey
 import threading
 import time
+from threading import Semaphore
 
 
 class Island():
@@ -46,6 +47,10 @@ class Island():
 
 
 
+        self.mutex = Semaphore(1)
+
+
+
         if self.text == 'S1':  # Civilize island isntanly if this is ISLAND 1
             self.monkeys_civilize()
 
@@ -61,7 +66,7 @@ class Island():
             print("Inside send_monkey_random_1")
             
             # Create a copy of the values to avoid modifying the dictionary during iteration
-            for Monkey in self.Monkeys_on_this_island:
+            for Monkey in list(self.Monkeys_on_this_island):
 
                 self.Monkeys_on_the_sea.append(Monkey)
                 self.Monkeys_on_this_island.remove(Monkey)
@@ -69,19 +74,21 @@ class Island():
                 # self.Monkeys_on_this_island
                 while run == True and Monkey.alive:
                     Monkey.x += 7  # Update monkey position
-                    print(Monkey.x)
-                    print(Monkey.alive)
-                    print("Inside send_monkey_random_2")
+
                     for Island in self.Islands.values():
-                        print("Inside send_monkey_random_3")
+
                         if pygame.Rect.colliderect(Monkey.shape_rect, Island.shape_rect) and Island != self:
                             print("Apina uudella saarella")
                             # monkey_is_on_sea = False
-                            Island.Monkeys_on_this_island.append(Monkey)
-                            self.Monkeys_on_the_sea.remove(Monkey)
+                            with self.mutex:
+                                Island.Monkeys_on_this_island.append(Monkey)
+                                # self.Monkeys_on_the_sea.remove(Monkey)
                             run = False
                             break  # Stop checking other islands once a match is found
                     time.sleep(0.1)
+
+                # self.Monkeys_on_this_island.remove(Monkey)
+
                 if Monkey.alive == False:
                     break
 
@@ -185,16 +192,18 @@ class Island():
 
     def update(self):
         if self.Monkeys_on_this_island: # " By iterating over list(self.Monkeys_on_this_island.keys()), you avoid modifying the dictionary while iterating "
-            
-            for Monkey in list(self.Monkeys_on_this_island): # We use list to be able to delete iterated item from list
-                Monkey.update()
-                if not Monkey.alive:
-                    self.Monkeys_on_this_island.remove(Monkey)
+            with self.mutex:
+                for Monkey in list(self.Monkeys_on_this_island): # We use list to be able to delete iterated item from list
+                    Monkey.update()
+                    if not Monkey.alive:
+                        self.Monkeys_on_this_island.remove(Monkey)
 
-            for Monkey in list(self.Monkeys_on_the_sea): # We use list to be able to delete iterated item from list
-                Monkey.update()
-                if not Monkey.alive:
-                    self.Monkeys_on_the_sea.remove(Monkey)
+        if self.Monkeys_on_the_sea:
+            with self.mutex:
+                for Monkey in list(self.Monkeys_on_the_sea): # We use list to be able to delete iterated item from list
+                    Monkey.update()
+                    if not Monkey.alive:
+                        self.Monkeys_on_the_sea.remove(Monkey)
             
         
         self.monkey_count = self.count_monkeys() # Update the monkey count here to ensure new information
