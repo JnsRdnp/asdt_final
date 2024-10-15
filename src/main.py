@@ -58,6 +58,7 @@ class Game:
     def create_button_objects(self):
         self.Buttons["create_island"] = Button(self.Colors, self.width/3, self.height-50, 22, self.screen, onClick=self.create_island_object ,text="Tulivuori purkautuu")
         self.Buttons["wipe_island"] = Button(self.Colors, self.width/3, self.height-90, 22, self.screen, onClick=self.destroy_islands ,text="Hävitä saaret")
+        # self.Buttons["spread_civilization"] = Button(self.Colors, self.width/3, self.height-90, 22, self.screen, onClick=self.destroy_islands ,text="Hävitä saaret")
 
 
     
@@ -87,7 +88,13 @@ class Game:
         if self.Islands: # Check that Islands exist 
             for Island in self.Islands.values(): # Dynamically draw each Island in the dictionary
                 Island.update()
+                
+            # if:
+            #     Island.is_island_civilized = True
+            # else:
+            #     Island.is_island_civilized = False
 
+                
         if self.Buttons: # Check that Buttons exist 
             for Button in self.Buttons.values(): # Dynamically draw each Island in the dictionary
                 Button.update()

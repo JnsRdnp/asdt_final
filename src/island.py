@@ -17,6 +17,7 @@ class Island():
     def __init__(self, colors, x, y, fontsize, screen, Islands, text=''):
         
         self.color = colors["yellow"]
+        self.platform_color = colors["white"]
         self.color_dict = colors
         self.x = x
         self.y = y
@@ -26,14 +27,14 @@ class Island():
         self.Islands = Islands
 
 
-        self.added_size = 20 # For the island padding relative to text
-        
+        self.added_size = 10 # For the island padding relative to text
+        self.is_island_civilized = False        
         
 
-        self.Monkeys_on_this_island={
-
-        }
+        self.Monkeys_on_this_island={}
         self.monkey_count = 0
+
+        self.Platforms = {}
         
         self.update()
         self.initialize_island()
@@ -41,15 +42,17 @@ class Island():
         self.island_creation_sound()
 
 
+
         if self.text == 'S1':  # Civilize island isntanly if this is ISLAND 1
             self.monkeys_civilize()
 
         
-    def monkeys_civilize(self): # Civilize all monkeys on this island
-
+    def monkeys_civilize(self):
         for monkey_key in list(self.Monkeys_on_this_island.keys()): 
             monkey = self.Monkeys_on_this_island[monkey_key]
-            monkey.is_civilized = True
+            monkey.is_civilized = True # Civilize the monkeys
+
+        # self.is_island_civilized = True # Mark island as civilisized
 
 
     def island_creation_sound(self):
@@ -106,17 +109,29 @@ class Island():
 
     def count_monkeys(self):
         value = len(self.Monkeys_on_this_island)
-        return value
+        return f"{value:02}" # Return as zero-padded
 
 
     def draw(self):
         pygame.draw.rect(self.screen, self.color, self.shape_rect, border_radius=5)
+
+        if self.is_island_civilized: # Draw platforms if is civ...
+            for platform in self.Platforms.values():
+                pygame.draw.rect(self.screen, self.platform_color, platform, border_radius=2)
 
         if self.Monkeys_on_this_island:
             for Monkey in self.Monkeys_on_this_island.values():
                 Monkey.draw()
 
         self.screen.blit(self.text_surface, (self.shape_rect.left+self.added_size/2, self.shape_rect.top+self.added_size/2))
+        
+
+    def check_if_any_civilisized_monkeys(self):
+        for Monkey in self.Monkeys_on_this_island.values():
+            if Monkey.is_civilized == True:
+                return True
+            
+        return False
         
 
     def update(self):
@@ -129,12 +144,28 @@ class Island():
                     del self.Monkeys_on_this_island[monkey_key]
         
         self.monkey_count = self.count_monkeys() # Update the monkey count here to ensure new information
+
+        if self.check_if_any_civilisized_monkeys() == True: # If any monkey is civ then island is too
+            self.is_island_civilized=True
         
         self.my_font = pygame.font.SysFont('Comic Sans MS', self.fontsize)
         self.text_surface = self.my_font.render(f'{self.text}:{self.monkey_count}', False, (0, 0, 0))
         self.text_rect = self.text_surface.get_rect()
         self.shape_rect = pygame.Rect(self.x,self.y,self.text_rect.width+self.added_size,self.text_rect.height+self.added_size)
 
+        self.define_platforms() # Define the possible platforms for if island civilisizes
 
+
+    def define_platforms(self):
+        # Right
+        self.Platforms['platform_rect_right'] = pygame.Rect(self.shape_rect.right, self.shape_rect.centery-(self.shape_rect.height/10), self.shape_rect.width/5, self.shape_rect.height/5)
         
+        # Left
+        self.Platforms['platform_rect_left'] = pygame.Rect(self.shape_rect.left-self.shape_rect.width/5, self.shape_rect.centery-(self.shape_rect.height/10), self.shape_rect.width/5, self.shape_rect.height/5)
+
+        # Top
+        self.Platforms['platform_rect_top'] = pygame.Rect((self.shape_rect.centerx-(self.shape_rect.width/10), self.shape_rect.top-self.shape_rect.height/4, self.shape_rect.width/6, self.shape_rect.height/4)) 
+
+        # Bottom
+        self.Platforms['platform_rect_bottom'] = pygame.Rect((self.shape_rect.centerx-(self.shape_rect.width/10), self.shape_rect.bottom, self.shape_rect.width/6, self.shape_rect.height/4)) 
 
