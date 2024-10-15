@@ -65,8 +65,6 @@ class Island():
             monkey_loc = self.generate_random_location_for_monkey()
             self.Monkeys_on_this_island[f"monkey_{monkey_index}"] = Monkey(self.color_dict, monkey_loc[0], monkey_loc[1], self.screen)
 
-        self.monkey_count = self.count_monkeys() # Update monkey count
-
 
     def generate_random_location_for_monkey(self):
         max_monkey_location = self.shape_rect.bottomright
@@ -95,9 +93,11 @@ class Island():
                 
             return False # If any of the islands did not overlap with this one, return False
         
+
     def count_monkeys(self):
         value = len(self.Monkeys_on_this_island)
         return value
+
 
     def draw(self):
         pygame.draw.rect(self.screen, self.color, self.shape_rect, border_radius=5)
@@ -108,6 +108,7 @@ class Island():
 
         self.screen.blit(self.text_surface, (self.shape_rect.left+self.added_size/2, self.shape_rect.top+self.added_size/2))
         
+
     def update(self):
         if self.Monkeys_on_this_island: # " By iterating over list(self.Monkeys_on_this_island.keys()), you avoid modifying the dictionary while iterating "
             
@@ -116,7 +117,9 @@ class Island():
                 monkey.update()
                 if not monkey.alive:
                     del self.Monkeys_on_this_island[monkey_key]
-
+        
+        self.monkey_count = self.count_monkeys() # Update the monkey count here to ensure new information
+        
         self.my_font = pygame.font.SysFont('Comic Sans MS', self.fontsize)
         self.text_surface = self.my_font.render(f'{self.text}:{self.monkey_count}', False, (0, 0, 0))
         self.text_rect = self.text_surface.get_rect()

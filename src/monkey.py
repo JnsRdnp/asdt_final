@@ -33,7 +33,7 @@ class Monkey():
             time.sleep(1)
             random_integer = random.randint(0,100)
             if random_integer == 99:
-                print("Apina kuoli nauruun")
+                # print("Apina kuoli nauruun")
                 self.alive=False
 
 
