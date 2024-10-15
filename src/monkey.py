@@ -32,7 +32,7 @@ class Monkey():
     def die(self): # Function to possibly die due to laughter or getting eaten by shark
         while self.alive:
             time.sleep(1)
-            random_integer = random.randint(80,100)
+            random_integer = random.randint(0,100)
             if random_integer == 99:
                 self.alive=False
             if self.x > 800:

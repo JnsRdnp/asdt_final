@@ -58,7 +58,18 @@ class Island():
         handle = threading.Thread(target=self.send_monkey_random)
         handle.start()
 
+    def positivenegative_random(self):
+        positive_or_negative = random.randint(0,1)
+        return positive_or_negative
+    
+    def axis_random(self):
+        vertical_or_horizontal = random.randint(0,1)
+        return vertical_or_horizontal
+
     def send_monkey_random(self):
+
+        posneg = self.positivenegative_random()
+        axis = self.axis_random()
         # monkey_is_on_sea = True
         run = True
 
@@ -73,7 +84,17 @@ class Island():
 
                 # self.Monkeys_on_this_island
                 while run == True and Monkey.alive:
-                    Monkey.x += 7  # Update monkey position
+                    print(posneg, axis)
+                    if posneg == 0 and axis == 0:
+                        Monkey.x += 7
+                    elif posneg == 1 and axis == 0:
+                        Monkey.x -= 7
+                    elif posneg == 0 and axis == 1:
+                        Monkey.y += 7
+                    elif posneg == 1 and axis == 1:
+                        Monkey.y -= 7
+
+                    # Monkey.x += 7  # Update monkey position
 
                     for Island in self.Islands.values():
 
