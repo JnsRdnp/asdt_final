@@ -12,7 +12,7 @@ class Monkey():
     def __init__(self, colors, x, y, screen):
         pygame.mixer.init(frequency=44100, size=-16, channels=1)
 
-        self.color = colors["magenta"]
+        self.colors = colors
         self.x = x
         self.y = y
         self.screen = screen
@@ -22,6 +22,7 @@ class Monkey():
 
         self.alive = True
         self.is_on_island = True # This boolean to handle dying of laughter
+        self.is_civilized = False
 
         # threading.Thread(target=self.play_random_sound).start() # Commented out due to ear failure
         # threading.Thread(target=self.die_of_laughter).start()
@@ -52,8 +53,11 @@ class Monkey():
         lava_sound.fadeout(3000)
 
 
-    def draw(self):
-        pygame.draw.rect(self.screen, self.color, self.shape_rect, border_radius=5)
+    def draw(self): # Draw cilized monkeys a bit differently
+        if self.is_civilized == False:
+            pygame.draw.rect(self.screen, self.colors["magenta"], self.shape_rect, border_radius=5)
+        else:
+            pygame.draw.rect(self.screen, self.colors["red"], self.shape_rect, border_radius=5) 
 
 
     def update(self):

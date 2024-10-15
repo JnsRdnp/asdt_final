@@ -40,7 +40,6 @@ class Game:
 
         self.Buttons = {} # Dictionary for Button objects
 
-      
 
         self.create_button_objects()
 

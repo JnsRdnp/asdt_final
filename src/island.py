@@ -25,8 +25,9 @@ class Island():
         self.text = text
         self.Islands = Islands
 
-        self.added_size = 20 # For the island padding relative to text
 
+        self.added_size = 20 # For the island padding relative to text
+        
         
 
         self.Monkeys_on_this_island={
@@ -39,14 +40,23 @@ class Island():
         self.create_monkeys()
         self.island_creation_sound()
 
-        # print(self.count_monkeys())
+
+        if self.text == 'S1':  # Civilize island isntanly if this is ISLAND 1
+            self.monkeys_civilize()
+
         
+    def monkeys_civilize(self): # Civilize all monkeys on this island
+
+        for monkey_key in list(self.Monkeys_on_this_island.keys()): 
+            monkey = self.Monkeys_on_this_island[monkey_key]
+            monkey.is_civilized = True
 
 
     def island_creation_sound(self):
         lava_sound = pygame.mixer.Sound('./assets/lava.wav')
         lava_sound.play()
         lava_sound.fadeout(3000)
+
 
     def initialize_island(self):
         while True: # Recreate the values for Island till there is no overlap
