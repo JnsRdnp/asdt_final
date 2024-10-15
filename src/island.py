@@ -8,7 +8,7 @@ import pygame
 import random
 from monkey import Monkey
 import threading
-
+import time
 
 class Island():
 
@@ -46,7 +46,37 @@ class Island():
         if self.text == 'S1':  # Civilize island isntanly if this is ISLAND 1
             self.monkeys_civilize()
 
-        
+    def send_monkey_random_handle(self):
+        handle = threading.Thread(target=self.send_monkey_random)
+        handle.start()
+
+    def send_monkey_random(self):
+        monkey_is_on_sea = True
+
+        if self.Monkeys_on_this_island and self.is_island_civilized:
+            print("Inside send_monkey_random_1")
+            
+            # Create a copy of the values to avoid modifying the dictionary during iteration
+            for Monkey in list(self.Monkeys_on_this_island.values()):
+
+                while monkey_is_on_sea and Monkey.alive:
+                    Monkey.x += 7  # Update monkey position
+
+                    print("Inside send_monkey_random_2")
+                    for Island in self.Islands.values():
+                        print("Inside send_monkey_random_3")
+                        if pygame.Rect.colliderect(Monkey.shape_rect, Island.shape_rect) and Island != self:
+                            print("Apina uudella saarella")
+                            monkey_is_on_sea = False
+                            break  # Stop checking other islands once a match is found
+                    
+                    if not monkey_is_on_sea:
+                        return  # Exit if the monkey is no longer on the sea
+
+                    time.sleep(0.2)  # Sleep to slow down updates (consider adjusting this for gameplay
+                    
+
+
     def monkeys_civilize(self):
         for monkey_key in list(self.Monkeys_on_this_island.keys()): 
             monkey = self.Monkeys_on_this_island[monkey_key]
@@ -145,7 +175,8 @@ class Island():
         
         self.monkey_count = self.count_monkeys() # Update the monkey count here to ensure new information
 
-        if self.check_if_any_civilisized_monkeys() == True: # If any monkey is civ then island is too
+        if self.check_if_any_civilisized_monkeys() == True and self.is_island_civilized == False: # If any monkey is civ then island is too
+            self.monkeys_civilize() # Civilize every other monkey too
             self.is_island_civilized=True
         
         self.my_font = pygame.font.SysFont('Comic Sans MS', self.fontsize)

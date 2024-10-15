@@ -54,11 +54,15 @@ class Game:
         self.island_counter = 0
         self.Islands.clear()
 
+    def send_1_monkey_per_civilisized_island(self):
+        for Island in self.Islands.values():
+            # threading.Thread(target=Island.send_monkey_random()).start()
+            Island.send_monkey_random_handle()
 
     def create_button_objects(self):
         self.Buttons["create_island"] = Button(self.Colors, self.width/3, self.height-50, 22, self.screen, onClick=self.create_island_object ,text="Tulivuori purkautuu")
         self.Buttons["wipe_island"] = Button(self.Colors, self.width/3, self.height-90, 22, self.screen, onClick=self.destroy_islands ,text="Hävitä saaret")
-        # self.Buttons["spread_civilization"] = Button(self.Colors, self.width/3, self.height-90, 22, self.screen, onClick=self.destroy_islands ,text="Hävitä saaret")
+        self.Buttons["spread_civilization"] = Button(self.Colors, self.width/12, self.height-90, 22, self.screen, onClick=self.send_1_monkey_per_civilisized_island ,text="Levitä ilosanomaa")
 
 
     
