@@ -74,8 +74,6 @@ class Island():
         run = True
 
         if len(self.Monkeys_on_this_island)>0 and self.is_island_civilized:
-            print("Inside send_monkey_random_1")
-            
             # Create a copy of the values to avoid modifying the dictionary during iteration
             for Monkey in list(self.Monkeys_on_this_island):
 
@@ -84,7 +82,6 @@ class Island():
 
                 # self.Monkeys_on_this_island
                 while run == True and Monkey.alive:
-                    print(posneg, axis)
                     if posneg == 0 and axis == 0:
                         Monkey.x += 7
                     elif posneg == 1 and axis == 0:
