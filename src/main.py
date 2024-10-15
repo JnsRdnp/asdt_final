@@ -54,6 +54,13 @@ class Game:
         self.island_counter = 0
         for Island in self.Islands.values():
             Island.running = False
+
+            # Killing are monkeys to ensure they dont keep on living :D
+            for Monkey in Island.Monkeys_on_this_island:
+                Monkey.alive=False
+            for Monkey in Island.Monkeys_on_the_sea:
+                Monkey.alive=False
+                
         self.Islands.clear()
 
     def send_1_monkey_per_civilisized_island(self):
@@ -73,12 +80,7 @@ class Game:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 # Kill monkeys
-                for Island in self.Islands.values():
-                    for Monkey in Island.Monkeys_on_this_island:
-                        Monkey.alive = False
-                    for Monkey in Island.Monkeys_on_the_sea:
-                        Monkey.alive = False
-                    Island.running = False
+                self.destroy_islands()
 
                 self.running = False
 

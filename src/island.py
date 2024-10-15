@@ -65,9 +65,10 @@ class Island():
         # self.automatic_sender = not self.automatic_sender # Toggle the state of automatic sender
 
         while self.Running == True:
-            while self.automatic_sender and self.Running:
+            while self.automatic_sender and self.Running and self.is_island_civilized:
                 self.send_monkey_random_handle()
                 time.sleep(10)
+            time.sleep(1)
 
 
 
