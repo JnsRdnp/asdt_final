@@ -45,14 +45,31 @@ class Island():
         self.create_monkeys()
         self.island_creation_sound()
 
-
+        self.automatic_sender = True
 
         self.mutex = Semaphore(1)
 
-
+        self.Running = True
 
         if self.text == 'S1':  # Civilize island isntanly if this is ISLAND 1
             self.monkeys_civilize()
+
+        # self.toggle_automatic_monkey_sender()
+        automatic_handle = threading.Thread(target=self.toggle_automatic_monkey_sender)
+        automatic_handle.start()
+
+
+    def toggle_automatic_monkey_sender(self):
+        # print("Automatic monkey sender is turned on")
+
+        # self.automatic_sender = not self.automatic_sender # Toggle the state of automatic sender
+
+        while self.Running == True:
+            while self.automatic_sender and self.Running:
+                self.send_monkey_random_handle()
+                time.sleep(10)
+
+
 
     def send_monkey_random_handle(self):
         handle = threading.Thread(target=self.send_monkey_random)
@@ -81,7 +98,7 @@ class Island():
                 self.Monkeys_on_this_island.remove(Monkey)
 
                 # self.Monkeys_on_this_island
-                while run == True and Monkey.alive:
+                while run == True and Monkey.alive and self.Running==True:
                     if posneg == 0 and axis == 0:
                         Monkey.x += 7
                     elif posneg == 1 and axis == 0:
@@ -91,13 +108,11 @@ class Island():
                     elif posneg == 1 and axis == 1:
                         Monkey.y -= 7
 
-                    # Monkey.x += 7  # Update monkey position
 
                     for Island in self.Islands.values():
 
                         if pygame.Rect.colliderect(Monkey.shape_rect, Island.shape_rect) and Island != self:
-                            print("Apina uudella saarella")
-                            # monkey_is_on_sea = False
+
                             with self.mutex:
                                 Island.Monkeys_on_this_island.append(Monkey)
                                 # self.Monkeys_on_the_sea.remove(Monkey)
@@ -105,7 +120,6 @@ class Island():
                             break  # Stop checking other islands once a match is found
                     time.sleep(0.1)
 
-                # self.Monkeys_on_this_island.remove(Monkey)
 
                 if Monkey.alive == False:
                     break

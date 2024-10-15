@@ -29,7 +29,7 @@ class Monkey():
         self.shark_sound = pygame.mixer.Sound('./assets/chomp.wav')
 
         # threading.Thread(target=self.play_random_sound).start() # Commented out due to ear failure
-        # threading.Thread(target=self.die_of_laughter).start()
+
         dying_handle = threading.Thread(target=self.die)
         dying_handle.start()
 
@@ -50,8 +50,8 @@ class Monkey():
                     self.shark_sound.play()
                 self.alive=False
 
-            # if self.x > 800:
-            #     self.shark_sound.play()
+            # if self.x > 800: # Die automatically if monkey goes out of bounds
+            #     self.shark_sound.play() 
             #     self.alive=False
             # if self.y > 600:
             #     self.shark_sound.play()
@@ -66,12 +66,6 @@ class Monkey():
             time.sleep(1)
             Beep.stop()
             time.sleep(10)
-
-
-    def living_sounds(self):
-        lava_sound = pygame.mixer.Sound('./assets/lava.wav')
-        lava_sound.play()
-        lava_sound.fadeout(3000)
 
 
     def draw(self): # Draw cilized monkeys a bit differently

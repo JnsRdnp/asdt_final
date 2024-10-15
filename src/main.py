@@ -52,6 +52,8 @@ class Game:
 
     def destroy_islands(self):
         self.island_counter = 0
+        for Island in self.Islands.values():
+            Island.running = False
         self.Islands.clear()
 
     def send_1_monkey_per_civilisized_island(self):
@@ -76,6 +78,7 @@ class Game:
                         Monkey.alive = False
                     for Monkey in Island.Monkeys_on_the_sea:
                         Monkey.alive = False
+                    Island.running = False
 
                 self.running = False
 
