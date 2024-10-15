@@ -74,8 +74,6 @@ class Game:
                 self.running = False
 
 
-
-
             if event.type == pygame.MOUSEBUTTONDOWN:   # Handling of button clicking
                 mouse_pos = event.pos  # gets mouse position
 

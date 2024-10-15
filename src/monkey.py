@@ -21,8 +21,20 @@ class Monkey():
         self.update()
 
         self.alive = True
+        self.is_on_island = True # This boolean to handle dying of laughter
 
         # threading.Thread(target=self.play_random_sound).start() # Commented out due to ear failure
+        # threading.Thread(target=self.die_of_laughter).start()
+        dieoflaughter_handle = threading.Thread(target=self.die_of_laughter)
+        dieoflaughter_handle.start()
+
+    def die_of_laughter(self):
+        while self.alive:
+            time.sleep(1)
+            random_integer = random.randint(0,100)
+            if random_integer == 99:
+                print("Apina kuoli nauruun")
+                self.alive=False
 
 
     def play_random_sound(self):

@@ -109,6 +109,14 @@ class Island():
         self.screen.blit(self.text_surface, (self.shape_rect.left+self.added_size/2, self.shape_rect.top+self.added_size/2))
         
     def update(self):
+        if self.Monkeys_on_this_island: # " By iterating over list(self.Monkeys_on_this_island.keys()), you avoid modifying the dictionary while iterating "
+            
+            for monkey_key in list(self.Monkeys_on_this_island.keys()): # We use list to be able to delete iterated item from list
+                monkey = self.Monkeys_on_this_island[monkey_key]
+                monkey.update()
+                if not monkey.alive:
+                    del self.Monkeys_on_this_island[monkey_key]
+
         self.my_font = pygame.font.SysFont('Comic Sans MS', self.fontsize)
         self.text_surface = self.my_font.render(f'{self.text}:{self.monkey_count}', False, (0, 0, 0))
         self.text_rect = self.text_surface.get_rect()
