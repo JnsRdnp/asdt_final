@@ -21,9 +21,11 @@ class Monkey():
 
         self.update()
 
-        self.alive = True
-        self.is_on_island = True # This boolean to handle dying of laughter
-        self.is_civilized = False
+        self.is_on_land = True # Value to watch to know surviving possibility
+
+        self.alive = True # If this turns to false, this monkey is removed from the monkey list it is currently in
+
+        self.is_civilized = False # Can this monkey civilize other monkeys
 
         self.laugh_sound = pygame.mixer.Sound('./assets/laugh.wav')
         self.shark_sound = pygame.mixer.Sound('./assets/chomp.wav')
@@ -34,28 +36,31 @@ class Monkey():
         dying_handle.start()
 
     def die(self): # Function to possibly die due to laughter or getting eaten by shark
-        while self.alive:
-            on_land = False
-            time.sleep(1)
-            random_integer = random.randint(0,100)
-            if random_integer == 99:
-                for Island in self.Islands.values(): # Play sound based on if monkey is on dry land or the sea
-                    if pygame.Rect.colliderect(self.shape_rect, Island.shape_rect):
-                        on_land = True
-                        break
-                
-                if on_land == True:
-                    self.laugh_sound.play()
-                else:
-                    self.shark_sound.play()
-                self.alive=False
 
-            # if self.x > 800: # Die automatically if monkey goes out of bounds
-            #     self.shark_sound.play() 
-            #     self.alive=False
-            # if self.y > 600:
-            #     self.shark_sound.play()
-            #     self.alive=False
+        while self.alive:
+            
+            while self.is_on_land and self.alive:
+                random_integer = random.randint(1,100)
+                for i in range(10): # Sleep 10 seconds but in for loop to avoid to long sleep times
+                    time.sleep(1)
+                    if self.is_on_land == False or self.alive == False: 
+                        break
+                if random_integer == 50:
+                    self.laugh_sound.play()
+                    print("Apina kuoli nauruun")
+                    self.alive = False
+
+
+            while self.is_on_land == False and self.alive:
+                random_integer = random.randint(1,100)
+                time.sleep(1)
+                if random_integer == 50:
+                    self.shark_sound.play()
+                    print("Apina kuoli merelle")
+                    self.alive = False
+            
+      
+
 
 
     def play_random_sound(self):

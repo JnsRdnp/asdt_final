@@ -16,7 +16,7 @@ class Game:
         # Set up display
         self.width, self.height = 800, 600
         self.screen = pygame.display.set_mode((self.width, self.height))
-        pygame.display.set_caption('Volcano Island')
+        pygame.display.set_caption('Apina saaristo')
 
         # Set up game variables
         self.clock = pygame.time.Clock()

@@ -60,9 +60,6 @@ class Island():
 
 
     def toggle_automatic_monkey_sender(self):
-        # print("Automatic monkey sender is turned on")
-
-        # self.automatic_sender = not self.automatic_sender # Toggle the state of automatic sender
 
         while self.Running == True:
             while self.automatic_sender and self.Running and self.is_island_civilized:
@@ -96,10 +93,18 @@ class Island():
             for Monkey in list(self.Monkeys_on_this_island):
 
                 self.Monkeys_on_the_sea.append(Monkey)
+
                 self.Monkeys_on_this_island.remove(Monkey)
 
                 # self.Monkeys_on_this_island
                 while run == True and Monkey.alive and self.Running==True:
+
+                    for Island in self.Islands.values(): # Check if monkey is on any of islands and change the land state based on that
+                        if not pygame.Rect.colliderect(Monkey.shape_rect, Island.shape_rect):
+                            Monkey.is_on_land = False
+                            break
+                        Monkey.is_on_land = True
+
                     if posneg == 0 and axis == 0:
                         Monkey.x += 7
                     elif posneg == 1 and axis == 0:
@@ -119,7 +124,8 @@ class Island():
                                 # self.Monkeys_on_the_sea.remove(Monkey)
                             run = False
                             break  # Stop checking other islands once a match is found
-                    time.sleep(0.1)
+
+                    time.sleep(0.1) 
 
 
                 if Monkey.alive == False:
